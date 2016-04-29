@@ -1,9 +1,12 @@
+PROGRAM = "LANGUAGE.PICK.BASIC.EXAMPLE_BP"
+*-------------------------------------------------------------------------
+* comment
+!COMMENT
+*-------------------------------------------------------------------------
 READU VAR FROM F.FILE, ID THEN
 NULL
 END >
 LOOP
-* comment
-!COMMENT
 read
 READNEXT ELSE EXIT
 ABORT
