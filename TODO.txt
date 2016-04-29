@@ -1,0 +1,14 @@
+  {
+    "comment": "this will highlight the subroutine keyword and the name of the subroutine seperately",
+    "begin": "(SUBROUTINE)",
+    "begin captures":{
+      "1":{
+        "name": "storage.type.pick"
+      },
+      "2":{
+        "name": "entity.name.function.pick"
+      }
+    },
+    "end": "([A-Z_-]+)",
+    "name": "entity.name.function.pick"
+  },

@@ -1,0 +1,28 @@
+{
+  "name": "language-pick-basic",
+  "version": "0.0.1",
+  "description": "An ATOM language package for PICK basic",
+  "keywords": [
+    "pick",
+    "pickbasic",
+    "pick basic"
+  ],
+  "activationCommands": {
+    "atom-workspace": "language-pick-basic:toggle"
+  },
+  "repository": "https://github.com/atom/language-pick-basic",
+  "license": "MIT",
+  "engines": {
+    "atom": "*",
+    "node": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/theexec/language-pick-basic.git"
+  },
+  "bugs": {
+  "url": "https://github.com/theexec/language-pick-basic/issues"
+  },
+  "dependencies": {
+  }
+}
