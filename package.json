@@ -1,6 +1,6 @@
 {
   "name": "language-pick-basic",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "An ATOM language package for PICK basic",
   "keywords": [
     "pick",
