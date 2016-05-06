@@ -1,0 +1,22 @@
+Error handeling for the following. Some of these rules are best practice and my personal preferance, but will compile. They will be noted as such.
+
+; not followed by comments
+a line with two equals signs
+IF THEN all on one line not requiring an END
+Try to figure out how to handel using a variable before it is initialized
+
+would love to work out LINTER API, not sure if i can without compiler.
+
+below is close but does not work.
+{
+"patterns": [
+  {
+  "comment": "this matches THEN, ELSE, END ELSE, ON ERROR, LOCKED when not followed by END",
+  "match": "(THEN|ELSE|END ELSE|ON ERROR|LOCKED)(?:(.*[^END]))",
+  "name": "meta.no.end.function.pick",
+  "captures":{
+      "1": {"name": "invalid.illegal.pick"}
+      }
+  },
+]
+}
