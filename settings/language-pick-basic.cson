@@ -1,0 +1,16 @@
+'.source.pick':
+  'editor':
+    'foldEndPattern': '\\b(REPEAT)\\b|^\\s*\\b(NEXT)\\b|^\\s*\\b(END)|^\\s*\\b(CASE)\\b|^\\s*\\b(END CASE)'
+
+    'increaseIndentPattern': '
+        ^\\s*\\b(FOR|CASE|BEGIN CASE)
+        |\\b(LOOP)\\b
+        |\\b(LOOP|THEN|LOCKED|ON ERROR|ELSE)$
+        |\\b(LOOP|THEN|LOCKED|ON ERROR|ELSE)
+      '
+    'decreaseIndentPattern': '
+        ^\\s*\\b(NEXT|CASE)
+        |\\b(REPEAT)\\b
+        |^\\s*\\b(REPEAT|END|END CASE)$
+        |^\\s*\\b(REPEAT|END|END CASE)
+      '

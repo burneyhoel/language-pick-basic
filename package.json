@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/theexec/language-pick-basic.git"
+    "url": "git+https://github.com/theexec/language-pick-basic.git"
   },
   "license": "MIT",
   "engines": {
@@ -22,5 +22,23 @@
   "bugs": {
     "url": "https://github.com/theexec/language-pick-basic/issues"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "readme": "# language-pick-basic package\n\nPick basic grammar for ATOM.\n",
+  "readmeFilename": "README.md",
+  "homepage": "https://github.com/theexec/language-pick-basic#readme",
+  "_id": "language-pick-basic@0.4.0",
+  "_shasum": "290b2e18312d2473cccda9f9ff901efdef8baafd",
+  "_resolved": "file:..\\d-116426-10572-bulbcl\\package.tgz",
+  "_from": "..\\d-116426-10572-bulbcl\\package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [],
+    "extensions": {
+      ".json": [
+        "package.json",
+        "TODO.json"
+      ]
+    },
+    "folders": []
+  }
 }

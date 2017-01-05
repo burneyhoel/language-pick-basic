@@ -7,23 +7,28 @@
 
   "patterns": [
     {
-      "comment": "All strings all the time",
-      "match": "(?<=:)(\\'[A-Za-z0-9\\:\\-\\_ %.\\|\\[\\]!@,=\"\\/\\\\]*\\' |\\\"[A-Za-z0-9\\:\\-\\_ %.\\|\\[\\]!@,=\\'\\/\\\\]*\\\"|\\\\[A-Za-z0-9\\:\\-\\_ %.\\|\\[\\]!@,=\\'\\/\\\"]*\\\\)(?=:)",
+      "comment": "Constants",
+      "match": "\\b(NULL)\\b",
+      "name": "constant.language.pick"
+    },
+    {
+      "comment": "Strings with concats",
+      "match": "(?<=\\:)(\\'[A-Za-z0-9\\:\\-\\_ %.\\|\\[\\]!@,=\\(\\)<>#\\?\\*\\\"\\/\\\\]*\\'|\\\"[A-Za-z0-9\\:\\-\\_ %.\\|\\[\\]!@,=\\(\\)<>#\\?\\*\\'\\/\\\\]*\\\"|\\\\[A-Za-z0-9\\:\\-\\_ %.\\|\\[\\]!@,=\\(\\)<>#\\?\\*\\'\\/\\\"]*\\\\)(?=\\:)",
       "name": "string.other.quoted-or-unquoted.pick"
     },
     {
-      "comment": "More strings",
-      "match": "(\\'[A-Za-z0-9\\:\\-\\_ %.\\|\\[\\]!@,=\"\\/\\\\]*\\' |\\\"[A-Za-z0-9\\:\\-\\_ %.\\|\\[\\]!@,=\\'\\/\\\\]*\\\"|\\\\[A-Za-z0-9\\:\\-\\_ %.\\|\\[\\]!@,=\\'\\/\\\"]*\\\\)",
+      "comment": "All strings all the time",
+      "match": "(\\'[A-Za-z0-9\\:\\-\\_ %.\\|\\[\\]!@,=\\(\\)<>#\\?\\*\\\"\\/\\\\]*\\'|\\\"[A-Za-z0-9\\:\\-\\_ %.\\|\\[\\]!@,=\\(\\)<>#\\?\\*\\'\\/\\\\]*\\\"|\\\\[A-Za-z0-9\\:\\-\\_ %.\\|\\[\\]!@,=\\(\\)<>#\\?\\*\\'\\/\\\"]*\\\\)",
       "name": "string.other.quoted-or-unquoted.pick"
     },
     {
       "comment": "Comments",
-      "match": "\\*.*",
+      "match": "(^\\s*\\*.*|^(\\*).*|(?<=;)\\*.*)",
       "name": "comment.line.asterisk.pick"
     },
     {
       "comment": "Comments",
-      "match": "\\!.*",
+      "match": "(^\\s*\\!.*|^(\\!).*|(?<=;)\\!.*)",
       "name": "comment.line.bang.pick"
     },
     {
@@ -32,46 +37,43 @@
       "name": "invalid.illegal.pick"
     },
     {
-      "comment": "ERROR, this matches IF when not followed by THEN",
-      "match": "^(IF)(?:(.*[^THEN|ELSE|ON ERROR|LOCKED]))(\n)",
-      "name": "meta.no.then.function.pick",
-      "captures":{
-        "1": {"name": "invalid.illegal.pick"}
-      }
-    },
-    {
       "comment": "Identifies GOSUB and the subroutine indavidually",
       "match": "(GOSUB )([a-z0-9\\-\\_\\.]*)",
       "name": "meta.gosub.function.pick",
       "captures":{
         "1": {"name": "keyword.control.pick"},
-        "2": {"name": "storage.pick"}
+        "2": {"name": "entity.function.pick"}
       }
     },
     {
+      "comment": "Identifies internal subroutine",
+      "match": "^([a-z0-9\\-\\_\\.]*)(?=:)\\b",
+      "name": "entity.function.pick"
+    },
+    {
       "comment": "Operators",
-      "match": "(\\(|\\)|\\/|\\&|\\$|,|\\bCAT\\b|:|=|<|>|\\^|#|\\bLE\\b|\\bLT\\b|\\bEQ\\b|\\bGE\\b|\\bGT\\b|\\bNE\\b|\\bOR\\b|\\bAND\\b)",
+      "match": "(\\(|\\)|\\/|\\&|\\$|,|\\bCAT\\b|:|=|<|>|;|\\*|\\-|\\+|\\^|#|\\bLE\\b|\\bLT\\b|\\bEQ\\b|\\bGE\\b|\\bGT\\b|\\bNE\\b|\\bOR\\b|\\bAND\\b)",
       "name": "keyword.operator.pick"
     },
     {
       "comment": "@ Positioning",
-      "match": "(@\\(([A-Za-z0-9\\-\\_.]*)\\))",
-      "name": "storage.pick"
+      "match": "(@)(?=\\()",
+      "name": "entity.function.pick"
     },
     {
       "comment": "@system variables",
-      "match": "(@[A-Za-z0-9\\-\\_.]*)",
-      "name": "storage.pick"
+      "match": "(?<!\\.)(@[A-Za-z0-9\\-\\_\\.]*|BELL)(?!\\.)\\b",
+      "name": "variable.other.pick"
     },
     {
       "comment": "F. file variables",
       "match": "(\\bF.\\b[A-Za-z0-9\\:\\-\\_.]*(?=\\,)|\\bF.\\b[A-Za-z0-9\\:\\-\\_.]*(?=\\ ))",
-      "name": "storage.pick"
+      "name": "variable.object.pick"
     },
     {
       "comment": "system variables",
       "match": "\\b(TIME|TIMEDATE|DATE|GETQUEUE|GETREADU|IN|ISMB|LISTUSER|STATUS)(?=\\((?=\\)))\\b",
-      "name": "storage.pick"
+      "name": "variable.control.import.include.pick"
     },
     {
       "comment": "Flow control functions",
@@ -86,7 +88,7 @@
     {
       "comment": "$ system commands",
       "match": "\\b(BASICTYPE|DEFINE|IFDEF|INCLUDE|INSERT|UNDEFINE)\\b",
-      "name": "storage.pick"
+      "name": "keyword.control.import.pick"
     },
     {
       "comment": "Development functions, do not forget to remove before sendout!",
@@ -99,24 +101,33 @@
       "name": "constant.numeric.pick"
     },
     {
+      "comment": "Numbers with _",
+      "match": "\\b([0-9]+)(\\_)\\b",
+      "name": "meta.numbers.function.pick",
+      "captures":{
+        "1": {"name": "constant.numeric.pick"},
+        "2": {"name": "keyword.control.pick"}
+      }
+    },
+    {
       "comment": "{} act like CALCULATE and execute a virtual attribute",
       "match": "(\\{)([A-Za-z0-9\\:\\-\\_.]*)(\\})",
       "name": "meta.CALCULATE.function.pick",
       "captures":{
         "1": {"name": "keyword.control.pick"},
-        "2": {"name": "storage.pick"},
+        "2": {"name": "Variable.paramaters.pick"},
         "3": {"name": "keyword.control.pick"}
       }
     },
     {
       "comment": "Functions that require paramaters",
       "match": "\\b(ABS|addAuthenticationRule|ACOS|addAuthenticationRule|addCertificate|addRequestParameter|ALPHA|amInitialize|amReceiveMsg|amReceiveRequest|amSendMsg|amSendRequest|amSendResponse|amTerminate|analyzeCertificate|ASCII|ATAN|BITAND|BITNOT|BITOR|BITXOR|BYTELEN|CALCULATE|CATS|CHANGE|CHAR|CHARLEN|CHARS|CHECKSUM|closeSocket|CloseXMLData|COL1|COL2|COS|COUNT|createCertificate|createCertRequest|createRequest|createSecureRequest|createSecurityContext|DBTOXML|DCOUNT|DIGEST|DIR|DISPLAYWIDTH|DOWNCASE|DQUOTE|DROUND|EBCDIC|ENCODE|ENCRYPT|EQS|EREPLACE|EXP|EXTRACT|FIELD|FIELDSTORE|FILEINFO|FMT|generateKey|GES|getCipherSuite|GETENV|getHTTPDefault|GETPTR|GETPU|getResponseHeader|getSocketInformation|getSocketOptions|GETUSERGROUP|GETUSERID|GETUSERNAME|GROUP|GTS|HASH|ICONV|ICONVS|INDEX|INDICES|initSecureServerSocket|initServerSocket|INMAT|INSERT|INT|ISNV|ISNVS|ITYPE|LEN|LENS|LES|LN|loadSecurityContext|LOWER|LTS|MATCHFIELD|MAXIMUM|MBLEN|MINIMUM|MOD|NEG|NES|NFAUSER|NOT|NOTS|NUM|NUMS|OCONV|OCONVS|openSecureSocket|openSocket|OpenXMLData|PrepareXML|protocolLogging|PWR|QUOTE|RAISE|readSocket|ReadXMLData|RECORDLOCKED|RECORDLOCKEDL|RECORDLOCKEDU|ReleaseXML|REPLACE|RND|RNDSEED|SADD|saveSecurityContext|SCMP|SDIV|SEQ|SEQS|setAuthenticationDepth|setCipherSuite|setClientAuthentication|SETENV|setHTTPDefault|setPrivateKey|setRandomSeed|setRequestHeader|setSocketOptions|showSecurityContext|SIGNATURE|SIN|SMUL|SOAPCreateRequest|SOAPCreateSecureRequest|SOAPGetDefault|SOAPGetFault|SOAPGetResponseHeader|SOAPRequestWrite|SOAPSetParameters|SOAPSetRequestBody|SOAPSetRequestContent|SOAPSetRequestHeader|SOAPSubmitRequest|SORT|SOUNDEX|SPACE|SPACES|SPLICE|SQLAllocConnect|SQLAllocEnv|SQLAllocStmt|SQLBindCol|SQLBindParameter|SQLCancel|SQLColAttributes|SQLColumns|SQLConnect|SQLDescribeCol|SQLDisconnect|SQLError|SQLExecDirect|SQLExecute|SQLFetch|SQLFreeConnect|SQLFreeEnv|SQLFreeStmt|SQLGetInfo|SQLGetTypeInfo|SQLNumParams|SQLNumResultCols|SQLParamOptions|SQLPrepare|SQLRowCount|SQLSetConnectOption|SQLSetParam|SQLSpecialColumns|SQLStatistics|SQLTables|SQLTransact|SQRT|SQUOTE|SSUB|STR|STRS|submitRequest|SUBSTRINGS|SUM|SYSTEM|TAN|TRIM|TRIMB|TRIMF|TRIMS|UNASSIGNED|UPCASE|writeSocket|XDOMAddChild|XDOMAppend|XDOMClone|XDOMClose|XDOMCreateNode|XDOMCreateRoot|XDOMEvaluate|XDOMGetAttribute|XDOMGetNodeName|XDOMGetNodeType|XDOMGetNodeValue|XDOMGetOwnerDocument|XDOMGetUserData|XDOMInsert|XDOMLocate|XDOMLocate|XDOMOpen|XDOMRemove|XDOMReplace|XDOMSetNodeValue|XDOMSetUserData|XDOMTransform|XDOMValidate|XDOMValidateDom|XDOMWrite|XLATE|XMAPClose|XMAPCreate|XMAPOpen|XMAPReadNext|XMAPToXMLDoc|XMLError|XMLExecute|XMLGetError|XMLGetOptions|XMLGetOptionValue|XMLSetOptions|XMLTODB)(?=\\()\\b",
-      "name": "storage.type.pick"
+      "name": "keyword.pick"
     },
     {
       "comment": "Strong functions",
-      "match": "\\b(APPEND|ASYNC|AT|BEFORE|BPIOCP|BPIOCPN|BUFFER.KEYS|CALL|CALLC|CAPTURING|CHAIN|CLEAR|CLEARCOMMON|CLEARDATA|CLEARFILE|CLEARINPUT|CLEARSELECT|CLOSE|CLOSESEQ|COMMON|CONVERT|CRT|DATA|DEACTIVATEKEY|DEFFUN|DEL|DELETE|DELETELIST|DELETEU|DIM|DIMENSION|DISPLAY|ECHO|EDADRV_Cleanup|EDADRV_CloseStmt|EDADRV_Connect|EDADRV_Disconnect|EDADRV_DropStmt|EDADRV_EndTransaction|EDADRV_ExecuteStmt|EDADRV_FetchStmt|EDADRV_FreeResult|EDADRV_GetDBInfo|EDADRV_GetErrmsg|EDADRV_GetSpecialInfo|EDA_LoadSymbols|EDADRV_Perform|EDADRV_PrepareStmt|ENABLEDEC|ENTER|EQU|EQUATE|EXECUTE|EXECUTESQL|FILELOCK|FILEUNLOCK|FIND|FINDSTR|FLUSH|FOOTING|FORMLIST|FROM|FUNCTION|GARBAGECOLLECT|GET|GETLIST|GROUPSTORE|HEADING|HUSH|IF|IN|INPUT|INPUTCLEAR|INPUTERR|INPUTIF|INPUTNULL|INPUTRAP|INS|LENGTH|LOCATE|LOCK|LOCKED|MAT|MATBUILD|MATPARSE|MATREAD|MATREADL|MATREADU|MATWRITE|MATWRITEU|MDPERFORM|NULL|NOCONVERT|NODELAY|ON|\\b(?<!.)OPEN(?= )|OPENSEQ|openSocket|OpenXMLData|OSBREAD|OSBWRITE|OSCLOSE|OSDELETE|OSOPEN|OSREAD|OSWRITE|PAGE|PAUSE|PASSLIST|PCPERFORM|PERFORM|PRECISION|PRINT|PRINTER|PRINTERCLOSE|PRINTERR|PROCREAD|PROCWRITE|PROGRAM|PROMPT|READ|READBCK|READBCKL|READBCKU|READFWD|READFWDL|READFWDU|READL|READLIST|READNEXT|READNEXTTUPLE|READONLY|READSELECT|READSEQ|READT|READU|READV|READVL|READVU|READXBCK|READXFWD|ReadXMLData|RELEASE|ReleaseXML|REM|REMOVE|RESIZET|RETURN|REUSE|RETURNING|REWIND|RQM|RTNLIST|SELECT|SELECTINDEX|SELECTINFO|SETTING|SEND|SENDX|SETINDEX|SETTING|SLEEP|SSELECT|STOP|SUBROUTINE|SWAP|SYNC|(?<= )TO(?= )|TRANSACTION ABORT|TRANSACTION COMMIT|TRANSACTION START|UDTEXECUTE|UNASSIGNED|UNFILTERED|UNIT|UNLOCK|UDTEXECUTE|WAKE|WAITING|WEOF|WEOFSEQ|WRITE|WRITELIST|WRITEONLY|WRITESEQ|WRITESEQF|WRITET|WRITEU|WRITEV|WRITEVU)\\b",
-      "name": "constant.variable.pick"
+      "match": "\\b(?<!\\.)(APPEND|ASYNC|AT|BEFORE|BPIOCP|BPIOCPN|BUFFER.KEYS|CALL|CALLC|CAPTURING|CHAIN|CLEAR|CLEARCOMMON|CLEARDATA|CLEARFILE|CLEARINPUT|CLEARSELECT|CLOSE|CLOSESEQ|COMMON|CONVERT|CRT|DATA|DEACTIVATEKEY|DEFFUN|DEL|DELETE|DELETELIST|DELETEU|DIM|DIMENSION|DISPLAY|ECHO|EDADRV_Cleanup|EDADRV_CloseStmt|EDADRV_Connect|EDADRV_Disconnect|EDADRV_DropStmt|EDADRV_EndTransaction|EDADRV_ExecuteStmt|EDADRV_FetchStmt|EDADRV_FreeResult|EDADRV_GetDBInfo|EDADRV_GetErrmsg|EDADRV_GetSpecialInfo|EDA_LoadSymbols|EDADRV_Perform|EDADRV_PrepareStmt|ENABLEDEC|ENTER|EQU|EQUATE|EXECUTE|EXECUTESQL|FILELOCK|FILEUNLOCK|FIND|FINDSTR|FLUSH|FOOTING|FORMLIST|FROM|FUNCTION|GARBAGECOLLECT|GET|GETLIST|GROUPSTORE|HEADING|HUSH|IF|IN|INPUT|INPUTCLEAR|INPUTERR|INPUTIF|INPUTNULL|INPUTRAP|INS|LENGTH|LOCATE|LOCK|LOCKED|MAT|MATBUILD|MATPARSE|MATREAD|MATREADL|MATREADU|MATWRITE|MATWRITEU|MDPERFORM|NULL|NOCONVERT|NODELAY|ON|OPEN|OPENSEQ|openSocket|OpenXMLData|OSBREAD|OSBWRITE|OSCLOSE|OSDELETE|OSOPEN|OSREAD|OSWRITE|PAGE|PAUSE|PASSLIST|PCPERFORM|PERFORM|PRECISION|PRINT|PRINTER|PRINTERCLOSE|PRINTERR|PROCREAD|PROCWRITE|PROGRAM|PROMPT|READ|READBCK|READBCKL|READBCKU|READFWD|READFWDL|READFWDU|READL|READLIST|READNEXT|READNEXTTUPLE|READONLY|READSELECT|READSEQ|READT|READU|READV|READVL|READVU|READXBCK|READXFWD|ReadXMLData|RELEASE|ReleaseXML|REM|REMOVE|RESIZET|RETURN|REUSE|RETURNING|REWIND|RQM|RTNLIST|SELECT|SELECTINDEX|SELECTINFO|SETTING|SEND|SENDX|SETINDEX|SETTING|SLEEP|SSELECT|STOP|SUBROUTINE|SWAP|SYNC|TO|TRANSACTION ABORT|TRANSACTION COMMIT|TRANSACTION START|UDTEXECUTE|UNASSIGNED|UNFILTERED|UNIT|UNLOCK|UDTEXECUTE|WAKE|WAITING|WEOF|WEOFSEQ|WRITE|WRITELIST|WRITEONLY|WRITESEQ|WRITESEQF|WRITET|WRITEU|WRITEV|WRITEVU)(?!\\.)\\b",
+      "name": "keyword.control.pick"
     }
   ]
 }
