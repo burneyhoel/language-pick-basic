@@ -2,15 +2,16 @@
   'editor':
     'foldEndPattern': '\\b(REPEAT)\\b|^\\s*\\b(NEXT)\\b|^\\s*\\b(END)|^\\s*\\b(CASE)\\b|^\\s*\\b(END CASE)'
 
-    'increaseIndentPattern': '
-        ^\\s*\\b(FOR|CASE|BEGIN CASE)
-        |\\b(LOOP)\\b
-        |\\b(LOOP|THEN|LOCKED|ON ERROR|ELSE)$
-        |\\b(LOOP|THEN|LOCKED|ON ERROR|ELSE)
+    'increaseIndentPattern': '(?x)
+        ^\\s*\\b(FOR|BEGIN\\sCASE)$
+        |\\b(LOOP|CASE)\\b
+        |\\b(LOOP|THEN|LOCKED|ON\\sERROR|ELSE)$
+        |\\b(LOOP|THEN|LOCKED|ON\\sERROR|ELSE)
       '
-    'decreaseIndentPattern': '
+    'decreaseIndentPattern': '(?x)
         ^\\s*\\b(NEXT|CASE)
+        |(?<!BEGIN\\sCASE)(CASE)
         |\\b(REPEAT)\\b
-        |^\\s*\\b(REPEAT|END|END CASE)$
-        |^\\s*\\b(REPEAT|END|END CASE)
+        |^\\s*\\b(REPEAT|END|END\\sCASE)$
+        |^\\s*\\b(REPEAT|END|END\\sCASE)
       '
