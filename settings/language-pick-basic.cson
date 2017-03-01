@@ -3,15 +3,22 @@
     'foldEndPattern': '\\b(REPEAT)\\b|^\\s*\\b(NEXT)\\b|^\\s*\\b(END)|^\\s*\\b(CASE)\\b|^\\s*\\b(END CASE)'
 
     'increaseIndentPattern': '(?x)
-        ^\\s*\\b(FOR|BEGIN\\sCASE)$
-        |\\b(LOOP|CASE)\\b
-        |\\b(LOOP|THEN|LOCKED|ON\\sERROR|ELSE)$
-        |\\b(LOOP|THEN|LOCKED|ON\\sERROR|ELSE)
+        ^\\s*\\b(BEGIN\\sCASE|LOOP)$
+        |^\\s*\\b(FOR|CASE)\\b
+        |\\b(THEN|LOCKED|ON\\sERROR|ELSE)$
       '
+
+    'indentNextLinePattern': '(?x)
+
+      '
+
+    'decreaseNextIndent': '(?x)
+
+      '
+
     'decreaseIndentPattern': '(?x)
-        ^\\s*\\b(NEXT|CASE)
-        |(?<!BEGIN\\sCASE)(CASE)
+        ^\\s*\\b(NEXT|CASE)(?=.)
         |\\b(REPEAT)\\b
-        |^\\s*\\b(REPEAT|END|END\\sCASE)$
-        |^\\s*\\b(REPEAT|END|END\\sCASE)
+        |^\\s*\\b(REPEAT|END\\sCASE)$
+        |^\\s*\\b(END)\\b
       '

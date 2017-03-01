@@ -24,12 +24,12 @@
     },
     {
       "comment": "Comments",
-      "match": "(^\\s*\\*.*|^(\\*).*|(?<=;)\\*.*)",
+      "match": "(^\\s*\\*.*|^(\\*).*|(?<=;)\\s*\\*.*)",
       "name": "comment.line.asterisk.pick"
     },
     {
       "comment": "Comments",
-      "match": "(^\\s*\\!.*|^(\\!).*|(?<=;)\\!.*)",
+      "match": "(^\\s*\\!.*|^(\\!).*|(?<=;)\\s\\*!.*)",
       "name": "comment.line.bang.pick"
     },
     {
@@ -43,13 +43,17 @@
       "name": "meta.gosub.function.pick",
       "captures":{
         "1": {"name": "keyword.control.pick"},
-        "2": {"name": "entity.function.pick"}
+        "2": {"name": "variable.other.pick"}
       }
     },
     {
       "comment": "Identifies internal subroutine",
-      "match": "^([a-z0-9\\-\\_\\.]*)(?=:)\\b",
-      "name": "entity.function.pick"
+      "match": "([a-z0-9\\-\\_\\.]*)(:)$",
+      "name": "meta.sub.function.pick",
+      "captures":{
+        "1": {"name": "variable.other.pick"},
+        "2": {"name": "variable.other.pick"}
+      }
     },
     {
       "comment": "Operators",
@@ -59,7 +63,7 @@
     {
       "comment": "@ Positioning",
       "match": "(@)(?=\\()",
-      "name": "entity.function.pick"
+      "name": "variable.other.pick"
     },
     {
       "comment": "@system variables",

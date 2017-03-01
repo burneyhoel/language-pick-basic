@@ -3,21 +3,31 @@ PROGRAM = "LANGUAGE.PICK.BASIC.EXAMPLE_BP"
 * comment
 !COMMENT
 *-------------------------------------------------------------------------
-READU VAR FROM F.FILE, ID THEN
-NULL
-END >
-LOOP
-read
-READNEXT ELSE EXIT
-ABORT
-@SYSTEM.RETURN.CODE b j k l
-WRITEV
-"STRING" OR 'STRING'
-IF VAR GT (BLAH_BLAH BLAH:TEST)
-\TEST\ /TEST/
-ABORT
-GOSUB alldone
-# 5
-= 5
+CMD = \SELECT CHANGES WITH LAGUNA.DATE = "\:YESTERDAY:\"\
+CHANGES.LIST = ""
+EXECUTE CMD RTNLIST CHANGES.LIST CAPTURING JUNK
+IF @SYSTEM.RETURN.CODE > 0 THEN
+
+  LOOP
+    READNEXT ID FROM CHANGE.LIST ELSE EXIT
+    READV TO.CHECK FROM F.UPDATES.AUDIT,"MACH.":ID,1 THEN
+      READV WHEN.SENT FROM F.UPDATES.AUDIT,"MACH.":ID,4 THEN
+        HOW.MANY = DCOUNT(TO.CHECK,@VM); *COMMENT
+        FOR X = 1 TO HOW.MANY          ; !COMMENT
+          IF WHEN.SENT<1,X> = TODAY-1 THEN
+            IF TO.REPORT THEN
+              TO.REPORT := @AM:TO.CHECK<1,X>
+            END ELSE
+              TO.REPORT := TO.CHECK<1,X>
+            END
+          END
+        NEXT X
+      END
+    END
+  REPEAT
+
+END
+*-------------------------------------------------------------------------
 alldone:
-ON ERROR
+*-------------------------------------------------------------------------
+STOP
